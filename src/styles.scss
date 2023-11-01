@@ -2,6 +2,7 @@
   --content-width: 87.5rem;
   --bg-header: #0b92b2;
   --bg-body: #2a2426;
+  --color: #dedede;
 }
 
 *,
@@ -20,6 +21,9 @@ body {
   min-height: 100vh;
   background-color: var(--bg-body);
   line-height: 1.5;
+  color: var(--color);
+  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -60,5 +64,6 @@ ul {
   :root {
     --bg-header: #a82a2d;
     --bg-body: #fcfbff;
+    --color: #232323;
   }
 }
