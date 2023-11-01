@@ -1,4 +1,5 @@
 .mainContent {
   flex-grow: 1;
-  margin-top: auto;
+  margin: auto auto 0;
+  max-width: var(--content-width);
 }
