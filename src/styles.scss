@@ -1,3 +1,9 @@
+:root {
+  --content-width: 87.5rem;
+  --bg-header: #0b92b2;
+  --bg-body: #2a2426;
+}
+
 *,
 *::before,
 *::after {
@@ -11,6 +17,8 @@ a {
 
 body {
   margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg-body);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -39,4 +47,18 @@ h6 {
 
 ul {
   padding-left: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-header: #a82a2d;
+    --bg-body: #fcfbff;
+  }
 }
