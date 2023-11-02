@@ -1,0 +1,15 @@
+<!-- @Todo: añadir enlace a la página del pokémon -->
+<li class="pokemonItem">
+  <figure class="pokemonItem__content" (mouseenter)="addAnimation()">
+    <img class="pokemonItem__img"
+      [src]="pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default"
+      [alt]="pokemon.name">
+    <figcaption class="pokemonItem__name">
+      {{pokemon.name}}
+    </figcaption>
+    <svg class="pokemonItem__hearth" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 490 490">
+      <path fill="currentColor" [class]="{'pokemonItem__hearth__animation': isActive}"
+        d="M316.55 108.34a15 15 0 0 1-4.3 20.77 58.6 58.6 0 0 0-9.61 7.93c-2.94 3-6.83 4.5-10.72 4.5a15 15 0 0 1-10.71-25.5 88.7 88.7 0 0 1 14.56-12 15.01 15.01 0 0 1 20.78 4.3zm130.47 177.53-148.84 151.7A74 74 0 0 1 245 460a74 74 0 0 1-53.18-22.43L42.98 285.87c-57.3-58.4-57.3-153.44 0-211.85C70.83 45.63 107.88 30 147.3 30A144.9 144.9 0 0 1 245 67.65 144.9 144.9 0 0 1 342.69 30c39.43 0 76.48 15.63 104.33 44.02 57.3 58.4 57.3 153.44 0 211.85zM425.6 95.03C403.43 72.44 374 60 342.69 60c-31.3 0-60.74 12.44-82.9 35.03-1.13 1.14-2.14 2.53-3.54 3.77-7.54 6.66-16.38 6.32-22.5 0-1.3-1.35-2.41-2.63-3.53-3.77C208.06 72.44 178.62 60 147.3 60c-31.3 0-60.74 12.44-82.9 35.03-45.95 46.82-45.95 123 0 169.83l148.83 151.7A44.21 44.21 0 0 0 245 430a44.21 44.21 0 0 0 31.76-13.43l148.84-151.7c45.94-46.83 45.94-123.02 0-169.84zm-21.43 21a86.48 86.48 0 0 0-31.2-20.5 15 15 0 0 0-10.66 28.05 56.7 56.7 0 0 1 20.43 13.46c23.21 23.66 23.21 62.15 0 85.81l-52.65 53.66a15 15 0 1 0 21.43 21l52.65-53.65c34.57-35.24 34.57-92.59 0-127.83z" />
+    </svg>
+  </figure>
+</li>

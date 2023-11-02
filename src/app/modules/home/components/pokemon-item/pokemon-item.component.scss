@@ -1,0 +1,77 @@
+.pokemonItem {
+  position: relative;
+  background-color: var(--bg-card-pokemon);
+  list-style-type: none;
+  border-radius: var(--radius-6);
+  overflow: hidden;
+
+  &__content {
+    margin: 0;
+  }
+
+  &__name {
+    padding: 0.4rem 0;
+    background-image: linear-gradient(
+      var(--border-card-pokemon-name) 10%,
+      var(--bg-card-pokemon-name) 10% 90%,
+      var(--border-card-pokemon-name) 90%
+    );
+    font-size: 2rem;
+    line-height: 2.75rem;
+    text-transform: capitalize;
+    text-align: center;
+  }
+
+  &__hearth {
+    --size-hearth: 5rem;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--size-hearth);
+    height: var(--size-hearth);
+    color: rgb(195, 36, 36);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -50%);
+    transition: color ease-in-out 100ms;
+    overflow: visible;
+
+    &__animation {
+      transform-origin: center center;
+      animation: 300ms linear 0s 3 running turnHearth;
+      animation-play-state: paused;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pokemonItem__hearth__animation {
+    animation-name: none;
+  }
+}
+
+@media (hover: hover) {
+  .pokemonItem:hover .pokemonItem__hearth {
+    opacity: 1;
+    visibility: visible;
+
+    &__animation {
+      animation-play-state: running;
+    }
+  }
+}
+
+@keyframes turnHearth {
+  0% {
+    transform: scale(0.6);
+  }
+
+  33% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
