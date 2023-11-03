@@ -1,0 +1,38 @@
+.loader {
+  --size-loader: 6.25rem;
+
+  position: relative;
+  margin: 0 auto;
+  width: var(--size-loader);
+  height: var(--size-loader);
+  border-radius: 50%;
+  background-image: linear-gradient(
+    to right,
+    var(--bg-card-pokemon-name) 55%,
+    var(--border-card-pokemon-name)
+  );
+  animation: 1s linear 0s infinite running rotateLoader;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 90%;
+    height: 90%;
+    background-color: var(--bg-body);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes rotateLoader {
+  to {
+    transform: rotate(0);
+  }
+
+  from {
+    transform: rotate(-1turn);
+  }
+}
