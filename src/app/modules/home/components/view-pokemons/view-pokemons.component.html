@@ -1,13 +1,16 @@
 <section class="section__pokemons">
+  <h2 class="section__title">These Pokémon want to be your friends</h2>
   <p *ngIf="errorMessage; else viewPokemons" class="errorMessage">
     {{errorMessage}}
   </p>
   <ng-template #viewPokemons>
-    <ul class="pokemonList">
+    <ul *ngIf="pokemons; else loader" class="pokemonList">
       <ng-container *ngFor="let pokemon of pokemons">
         <app-pokemon-item [pokemon]="pokemon" />
       </ng-container>
     </ul>
-    <!-- @Todo: Loader -->
+    <ng-template #loader>
+      <app-loader />
+    </ng-template>
   </ng-template>
 </section>

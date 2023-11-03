@@ -3,6 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Subject, catchError, throwError } from 'rxjs';
 
 import { PokemonDataService } from 'src/app/services';
+import { LoaderComponent } from 'src/app/shared';
 import { PokemonItemComponent } from '../pokemon-item';
 
 import type { Pokemon } from 'src/app/typings/pokemon';
@@ -11,7 +12,7 @@ import type { Pokemon } from 'src/app/typings/pokemon';
   selector: 'app-view-pokemons',
   templateUrl: './view-pokemons.component.html',
   styleUrls: ['./view-pokemons.component.scss'],
-  imports: [CommonModule, PokemonItemComponent],
+  imports: [CommonModule, PokemonItemComponent, LoaderComponent],
   standalone: true,
 })
 export class ViewPokemonsComponent implements OnInit {
