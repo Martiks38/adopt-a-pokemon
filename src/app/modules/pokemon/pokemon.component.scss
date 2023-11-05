@@ -1,0 +1,69 @@
+.bgPokemon {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: no-repeat top center / cover url("/assets/images/bgPokemon.jpg");
+  z-index: -1;
+}
+
+.pokemonContainer {
+  display: grid;
+  grid-template-columns: 100%;
+  justify-items: center;
+  align-items: center;
+  min-height: inherit;
+}
+
+.pokemon__img {
+  max-width: 15.625rem;
+  width: 100%;
+  min-width: 12.5rem;
+  height: auto;
+  margin: 0 auto;
+}
+
+.pokemon {
+  padding: 1rem 2rem;
+  max-width: 21.875rem;
+  width: 100%;
+  background-color: #2a2426;
+  border-radius: var(--radius-8);
+
+  &__name {
+    margin: 0.2em 0 0.4em;
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    text-transform: capitalize;
+    text-align: center;
+  }
+
+  &__data {
+    width: 100%;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    border-collapse: collapse;
+
+    &__property,
+    &__value {
+      padding-bottom: 1rem;
+    }
+
+    &__value {
+      text-align: center;
+    }
+  }
+}
+
+.button__adopt {
+  display: block;
+  padding: 0.4em 0.8em;
+  margin: 1rem auto 0;
+  width: fit-content;
+  background-color: #1cc3e9;
+  border: 2px solid #0b92b2;
+  color: #1a1616;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  border-radius: 0.625rem;
+}
