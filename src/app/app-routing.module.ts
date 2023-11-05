@@ -16,6 +16,10 @@ const routes: Routes = [
     path: 'signin',
     loadChildren: () => import('./modules').then((m) => m.SigninModule),
   },
+  {
+    path: 'pokemon/:pokemon',
+    loadChildren: () => import('./modules').then((m) => m.PokemonModule),
+  },
 ];
 
 @NgModule({
