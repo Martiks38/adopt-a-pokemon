@@ -1,0 +1,14 @@
+.serchPokemon {
+  padding: 0.4em 0.8em;
+  background-color: transparent;
+  border-radius: var(--radius-6);
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: inherit;
+  border: 2px solid var(--bg-header);
+
+  &::placeholder {
+    color: inherit;
+    opacity: 0.8;
+  }
+}
