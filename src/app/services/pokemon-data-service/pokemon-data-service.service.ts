@@ -11,7 +11,7 @@ import {
 } from 'rxjs';
 
 import { environment } from 'src/app/environment/environment';
-import { Pokemon, PokemonList } from 'src/app/typings/pokemon';
+import { Pokemon, PokemonData, PokemonList } from 'src/app/typings/pokemon';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +23,25 @@ export class PokemonDataService {
 
   private readonly http = inject(HttpClient);
 
+  getPokemon(name: string): Observable<Pokemon> {
+    const pokemon$ = this.http
+      .get<PokemonData>(`${this.baseUrl}/pokemon/${name}`)
+      .pipe(
+        retry(1),
+        map((pokemon) => this.mappedPokemon(pokemon)),
+        catchError((err) =>
+          throwError(
+            () =>
+              new Error(
+                `An error occurred while obtaining data for the Pokémon ${name}.`
+              )
+          )
+        )
+      );
+
+    return pokemon$;
+  }
+
   getPokemons(): Observable<Pokemon[]> {
     return this.http
       .get<PokemonList>(
@@ -32,11 +51,15 @@ export class PokemonDataService {
         retry(1),
         switchMap(({ results }) => {
           const observablesPokemons = results.map(({ url }) =>
-            this.http.get<Pokemon>(url)
+            this.http.get<PokemonData>(url)
           );
 
           return forkJoin(observablesPokemons).pipe(
-            map((pokemonDataArray) => pokemonDataArray.map((data) => data))
+            map((pokemonDataArray) => {
+              return pokemonDataArray.map((pokemon) =>
+                this.mappedPokemon(pokemon)
+              );
+            })
           );
         }),
         catchError((err) =>
@@ -46,5 +69,37 @@ export class PokemonDataService {
           )
         )
       );
+  }
+
+  private mappedPokemon(pokemon: PokemonData): Pokemon {
+    // La respuesta de los datos del pokémon incluyen más propiedas
+    // Por esto, se extraen los datos referidos a la interface Pokemon
+    const { name, height, weight, sprites, types } = pokemon;
+
+    const {
+      front_default,
+      front_female,
+      front_shiny,
+      front_shiny_female,
+      other,
+    } = sprites;
+
+    const typesMapped = types.map(({ type }) => type.name);
+
+    const mappedPokemon: Pokemon = {
+      name,
+      height,
+      weight,
+      sprites: {
+        front_default,
+        front_female,
+        front_shiny,
+        front_shiny_female,
+        other,
+      },
+      types: typesMapped,
+    };
+
+    return mappedPokemon;
   }
 }
