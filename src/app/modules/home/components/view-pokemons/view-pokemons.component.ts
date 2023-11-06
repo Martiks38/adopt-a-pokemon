@@ -3,22 +3,16 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Subject, catchError, throwError } from 'rxjs';
 
 import { PokemonDataService } from 'src/app/services';
-import { LoaderComponent } from 'src/app/shared';
-import { PokemonItemComponent } from '../pokemon-item';
 import { SearchPokemonComponent } from '../search-pokemon';
 import { storagePokemons } from 'src/assets/constants';
+import { PokemonListComponent } from '../pokemon-list';
 import type { Pokemon } from 'src/app/typings/pokemon';
 
 @Component({
   selector: 'app-view-pokemons',
   templateUrl: './view-pokemons.component.html',
   styleUrls: ['./view-pokemons.component.scss'],
-  imports: [
-    CommonModule,
-    PokemonItemComponent,
-    LoaderComponent,
-    SearchPokemonComponent,
-  ],
+  imports: [CommonModule, SearchPokemonComponent, PokemonListComponent],
   standalone: true,
 })
 export class ViewPokemonsComponent implements OnInit {

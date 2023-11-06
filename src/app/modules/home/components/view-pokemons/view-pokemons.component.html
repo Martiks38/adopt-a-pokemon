@@ -2,18 +2,10 @@
   <!-- @Todo: Mover a #viewPokemons -->
   <h2 class="section__title">These Pokémon want to be your friends</h2>
   <app-search-pokemon />
-  <!-- */ -->
   <p *ngIf="errorMessage; else viewPokemons" class="errorMessage">
     {{errorMessage}}
   </p>
   <ng-template #viewPokemons>
-    <ul *ngIf="pokemons; else loader" class="pokemonList">
-      <ng-container *ngFor="let pokemon of pokemons">
-        <app-pokemon-item [pokemon]="pokemon" />
-      </ng-container>
-    </ul>
-    <ng-template #loader>
-      <app-loader />
-    </ng-template>
+    <app-pokemon-list [pokemons]="pokemons"></app-pokemon-list>
   </ng-template>
 </section>
