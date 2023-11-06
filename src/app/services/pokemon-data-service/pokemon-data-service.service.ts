@@ -25,7 +25,7 @@ export class PokemonDataService {
 
   getPokemon(name: string): Observable<Pokemon> {
     const pokemon$ = this.http
-      .get<PokemonData>(`${this.baseUrl}/pokemon/${name}`)
+      .get<PokemonData>(`${this.baseUrl}/pokemon/${name.toLowerCase()}`)
       .pipe(
         retry(1),
         map((pokemon) => this.mappedPokemon(pokemon)),
@@ -88,8 +88,8 @@ export class PokemonDataService {
 
     const mappedPokemon: Pokemon = {
       name,
-      height,
-      weight,
+      height: height / 10,
+      weight: weight / 10,
       sprites: {
         front_default,
         front_female,
