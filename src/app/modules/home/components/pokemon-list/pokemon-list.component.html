@@ -1,0 +1,10 @@
+<ul class="pokemonList">
+  <ng-container *ngIf="pokemons.length !== 0; else loader">
+    <ng-container *ngFor="let pokemon of pokemons">
+      <app-pokemon-item [pokemon]="pokemon" />
+    </ng-container>
+  </ng-container>
+  <ng-template #loader>
+    <app-loader />
+  </ng-template>
+</ul>
