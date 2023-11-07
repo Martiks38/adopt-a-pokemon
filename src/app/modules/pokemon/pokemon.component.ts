@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { PokemonDataService } from 'src/app/services';
-import { storagePokemons } from 'src/assets/constants';
+import { storagePokemon, storagePokemons } from 'src/assets/constants';
 import type { Pokemon } from 'src/app/typings/pokemon';
 import { capitalize } from 'src/app/utils/capitalize';
 
@@ -28,8 +28,16 @@ export class PokemonComponent implements OnInit {
         this.titleSrv.setTitle(capitalize(titleName));
 
         const pokemonsList = window.sessionStorage.getItem(storagePokemons);
+        const pokemon = window.sessionStorage.getItem(storagePokemon);
 
-        if (typeof pokemonsList === 'string') {
+        if (pokemon) {
+          const parsePokemon: Pokemon = JSON.parse(pokemon);
+
+          this.pokemon = parsePokemon;
+          return;
+        }
+
+        if (pokemonsList) {
           const parsePokemonsList: Pokemon[] = JSON.parse(pokemonsList);
 
           const indexPokemon = parsePokemonsList.findIndex(
