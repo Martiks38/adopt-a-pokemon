@@ -27,18 +27,19 @@ export class PokemonComponent implements OnInit {
       if (typeof titleName === 'string') {
         this.titleSrv.setTitle(capitalize(titleName));
 
-        const pokemonsList = window.sessionStorage.getItem(storagePokemons);
-        const pokemon = window.sessionStorage.getItem(storagePokemon);
+        const storedPokemonsList =
+          window.sessionStorage.getItem(storagePokemons);
+        const storedPokemon = window.sessionStorage.getItem(storagePokemon);
 
-        if (pokemon) {
-          const parsePokemon: Pokemon = JSON.parse(pokemon);
+        if (storedPokemon) {
+          const parsePokemon: Pokemon = JSON.parse(storedPokemon);
 
           this.pokemon = parsePokemon;
           return;
         }
 
-        if (pokemonsList) {
-          const parsePokemonsList: Pokemon[] = JSON.parse(pokemonsList);
+        if (storedPokemonsList) {
+          const parsePokemonsList: Pokemon[] = JSON.parse(storedPokemonsList);
 
           const indexPokemon = parsePokemonsList.findIndex(
             ({ name }) => name === titleName
