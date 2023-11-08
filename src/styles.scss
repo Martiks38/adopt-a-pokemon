@@ -1,9 +1,11 @@
 :root {
+  --color-black: #2a2426;
   --content-width: 87.5rem;
   --size-logo: 2rem;
   --page-padding-x: 2rem;
   --page-padding-y: 0.4rem;
-  --bg-header: #0b92b2;
+  --bg-header-alpha-50: rgba(11, 147, 177, 0.5);
+  --bg-header-alpha-80: rgba(11, 147, 177, 0.8);
   --bg-body: #2a2426;
   --color: #dedede;
   --bg-card-pokemon: #111717;
