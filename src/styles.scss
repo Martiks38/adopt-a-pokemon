@@ -73,6 +73,8 @@ ul {
 @media (prefers-color-scheme: light) {
   :root {
     --bg-header: #a82a2d;
+    --bg-header-alpha-50: rgb(168 41 43 / 0.5);
+    --bg-header-alpha-80: rgb(168 41 43 / 0.8);
     --bg-body: #fcfbff;
     --color: #232323;
     --bg-card-pokemon: #d5acca;
