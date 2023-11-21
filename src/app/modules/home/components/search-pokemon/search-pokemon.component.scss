@@ -6,9 +6,23 @@
   line-height: 1.75rem;
   color: inherit;
   border: 2px solid var(--bg-header);
+  transition-property: background-color, color, font-size, line-height;
+  transition-timing-function: linear;
+  transition-duration: 99999s;
 
   &::placeholder {
     color: inherit;
     opacity: 0.8;
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: 1.5rem;
+  }
+
+  &:autofill {
+    background-color: transparent;
+    color: inherit;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
 }

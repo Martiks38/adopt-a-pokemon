@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -75,22 +73,25 @@ export class SearchPokemonComponent {
         .getPokemon(namePokemon)
         .pipe(
           catchError((err) => {
-            return throwError(() => {
-              this.errors = {
-                ...this.errors,
-                notExist: namePokemon,
-              };
-
-              return new Error(`The pokémon ${namePokemon} doesn't exist.`);
-            });
+            return throwError(
+              () => new Error(`The pokémon ${namePokemon} doesn't exist.`)
+            );
           })
         )
-        .subscribe((pokemon) => {
-          const strPokemon = JSON.stringify(pokemon);
+        .subscribe({
+          next: (pokemon) => {
+            const strPokemon = JSON.stringify(pokemon);
 
-          window.sessionStorage.setItem(storagePokemon, strPokemon);
+            window.sessionStorage.setItem(storagePokemon, strPokemon);
 
-          this.router.navigate(['pokemon', namePokemon]);
+            this.router.navigate(['pokemon', namePokemon]);
+          },
+          error: (err) => {
+            this.errors = {
+              ...this.errors,
+              notExist: namePokemon,
+            };
+          },
         });
     }
   }
