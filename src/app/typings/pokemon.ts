@@ -1,4 +1,4 @@
-interface PokemonList {
+interface FetchAllPokemonsResponse {
   count: number;
   next: string | null;
   previous: string | null;
@@ -49,4 +49,4 @@ interface PokemonData extends MainPokemonData {
   }[];
 }
 
-export { PokemonList, Pokemon, PokemonData };
+export { FetchAllPokemonsResponse, Pokemon, PokemonData };
