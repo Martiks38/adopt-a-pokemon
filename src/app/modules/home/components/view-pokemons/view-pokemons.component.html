@@ -1,11 +1,11 @@
 <section class="section__pokemons">
-  <!-- @Todo: Mover a #viewPokemons -->
-  <h2 class="section__title">These Pokémon want to be your friends</h2>
-  <app-search-pokemon />
   <p *ngIf="errorMessage; else viewPokemons" class="errorMessage">
     {{errorMessage}}
   </p>
   <ng-template #viewPokemons>
-    <app-pokemon-list [pokemons]="pokemons"></app-pokemon-list>
+    <h2 class="section__title">These Pokémon want to be your friends</h2>
+    <app-search-pokemon />
+    <app-panel-pagination [links]="navigationButtonLinks" />
+    <app-pokemon-list [pokemons]="pokemons" />
   </ng-template>
 </section>
