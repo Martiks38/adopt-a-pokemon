@@ -1,8 +1,13 @@
 <ul class="pokemonList">
-  <ng-container *ngIf="pokemons.length !== 0; else loader">
-    <ng-container *ngFor="let pokemon of pokemons">
-      <app-pokemon-item [pokemon]="pokemon" />
+  <ng-container *ngIf="pokemons; else loader">
+    <ng-container *ngIf="pokemons.length !== 0; else noPokemons">
+      <ng-container *ngFor="let pokemon of pokemons">
+        <app-pokemon-item [pokemon]="pokemon" />
+      </ng-container>
     </ng-container>
+    <ng-template #noPokemons>
+      <p>No there are pokémons</p>
+    </ng-template>
   </ng-container>
   <ng-template #loader>
     <app-loader />
