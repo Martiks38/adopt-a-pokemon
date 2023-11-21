@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { PokemonDataService } from 'src/app/services';
 import { storagePokemon, storagePokemons } from 'src/assets/constants';
-import type { Pokemon } from 'src/app/typings/pokemon';
 import { capitalize } from 'src/app/utils/capitalize';
+import type { Pokemon } from 'src/app/typings';
 
 @Component({
   selector: 'app-pokemon',
