@@ -11,8 +11,8 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
-  FormBuilder,
 } from '@angular/forms';
+import { tap } from 'rxjs';
 import { PokemonDataService } from 'src/app/services';
 import type { PageLinks } from 'src/app/typings';
 
@@ -25,9 +25,9 @@ import type { PageLinks } from 'src/app/typings';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PanelPaginationComponent implements OnInit, OnChanges {
-  @Input() links: PageLinks = { previous: null, next: null };
+  @Input() links: PageLinks = { previous: false, next: false, offset: 0 };
 
-  currentPage: number = 0;
+  currentPage: number = this.links.offset;
   maxPages!: number;
   ariaPrevButton: string = this.links.previous
     ? ''
@@ -53,17 +53,27 @@ export class PanelPaginationComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.pokemonSvc.currentPage$.subscribe((page) => {
-      const currentPagePokemonList = (this.currentPage = page + 1);
+    this.pokemonSvc.currentPage$
+      .pipe(
+        tap((page) => {
+          const currentPagePokemonList = (this.currentPage = page + 1);
 
-      this.currentPage = currentPagePokemonList;
-      this.pageOfPokemonsListForm.setValue({ currentPage: this.currentPage });
-    });
+          this.currentPage = currentPagePokemonList;
+          this.pageOfPokemonsListForm.setValue({
+            currentPage: this.currentPage,
+          });
+        })
+      )
+      .subscribe();
 
-    this.pokemonSvc.totalPages$.subscribe((p) => {
-      this.maxPages = p;
-      this.errorNumberPageMesage = `The page number goes from 1 to ${p}.`;
-    });
+    this.pokemonSvc.totalPages$
+      .pipe(
+        tap((p) => {
+          this.maxPages = p;
+          this.errorNumberPageMesage = `The page number goes from 1 to ${p}.`;
+        })
+      )
+      .subscribe();
   }
 
   previousList() {
