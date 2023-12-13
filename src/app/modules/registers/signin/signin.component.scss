@@ -1,0 +1,58 @@
+.mainContainer {
+  display: grid;
+  grid-template-rows: minmax(360px, 420px);
+  place-content: center;
+  height: 100vh;
+}
+
+.wrapperForm {
+  --shadow: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+  --bg-signin: url("/assets/images/bg-sign.jpg");
+
+  background: var(--shadow), var(--bg-signin) center/cover no-repeat;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  max-height: 50rem;
+  height: 100%;
+
+  &__label {
+    padding-bottom: 0.4em;
+    color: #fff;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+  }
+
+  &__input {
+    padding: 0.2em 0.4em;
+    background-color: rgb(243, 237, 237);
+    border: solid 2px rgb(11, 147, 177);
+    border-radius: var(--radius-6);
+    transition: background-color linear 99999s;
+
+    &:not(:last-of-type) {
+      margin-bottom: 1.5rem;
+    }
+
+    &:autofill {
+      background-color: rgb(243, 237, 237);
+    }
+  }
+
+  &__button {
+    background-color: #d9ecf2;
+    margin-top: 2.75rem;
+    padding: 0.4em 1em;
+    border-radius: var(--radius-10);
+    border-width: 0;
+    font-weight: 600;
+    transition: 200ms ease-in-out background-color;
+
+    &:hover {
+      background-color: #4cb6dd;
+    }
+  }
+}
