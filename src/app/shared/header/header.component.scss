@@ -21,9 +21,26 @@
   }
 }
 
+.amountPokemons,
 .logo {
   width: auto;
   height: var(--size-logo);
+}
+
+.amountPokemons {
+  position: relative;
+
+  &__amount {
+    position: absolute;
+    top: -0.25rem;
+    right: -0.25rem;
+    color: #232323;
+    font-size: 1.25rem;
+  }
+
+  &__img {
+    height: inherit;
+  }
 }
 
 @keyframes float {

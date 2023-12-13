@@ -1,10 +1,15 @@
 <header class="header">
   <div class="header__content">
-    <a [routerLink]="['/']" aria-label="Ir al inicio">
+    <a [routerLink]="['/']" aria-label="Go to the beginning">
       <img src="/assets/images/logo.png" alt="Adopt Pokémon" class="logo">
     </a>
     <div>
-      <span>Change mode y login</span>
+
+      <a [routerLink]="['/']" aria-label="View adoption list" class="amountPokemons">
+        <img class="amountPokemons__img" src="/assets/images/amountPokemon.png" alt="Number of pokemons to adopt">
+        <span class="amountPokemons__amount">{{quantity}}</span>
+      </a>
+      <!-- <span>Change mode y login</span> -->
     </div>
   </div>
 </header>
