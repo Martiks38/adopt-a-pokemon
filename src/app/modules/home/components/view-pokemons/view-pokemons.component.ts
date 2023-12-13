@@ -1,50 +1,81 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { Subject, catchError, throwError } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
 
 import { PokemonDataService } from 'src/app/services';
 import { SearchPokemonComponent } from '../search-pokemon';
-import { storagePokemons } from 'src/assets/constants';
+import {
+  storageNavigationPageLinks,
+  storagePokemonsList,
+} from 'src/assets/constants';
 import { PokemonListComponent } from '../pokemon-list';
-import type { Pokemon } from 'src/app/typings/pokemon';
+import { PanelPaginationComponent } from '../panel-pagination';
+import type { PageLinks, Pokemon } from 'src/app/typings';
 
 @Component({
   selector: 'app-view-pokemons',
   templateUrl: './view-pokemons.component.html',
   styleUrls: ['./view-pokemons.component.scss'],
-  imports: [CommonModule, SearchPokemonComponent, PokemonListComponent],
+  imports: [
+    CommonModule,
+    SearchPokemonComponent,
+    PokemonListComponent,
+    PanelPaginationComponent,
+  ],
   standalone: true,
 })
 export class ViewPokemonsComponent implements OnInit {
-  searchPokemon$ = new Subject<Pokemon>();
   pokemons!: Pokemon[];
+  navigationButtonLinks: PageLinks = {
+    previous: false,
+    next: false,
+    offset: 0,
+  };
   errorMessage: string | null = null;
 
-  private searchSvc = inject(PokemonDataService);
-
-  constructor() {}
+  constructor(private pokemonSvc: PokemonDataService) {}
 
   ngOnInit(): void {
-    const cachePokemons = window.sessionStorage.getItem(storagePokemons);
+    this.pokemonSvc.currentPage$.subscribe(() => {
+      const cachePokemonsList =
+        window.localStorage.getItem(storagePokemonsList);
+      const cacheNavigationPageLinks = window.localStorage.getItem(
+        storageNavigationPageLinks
+      );
 
-    if (cachePokemons) {
-      const parseCachePokemons: Pokemon[] = JSON.parse(cachePokemons);
-      const checkParseCachePokemons =
-        Array.isArray(parseCachePokemons) && parseCachePokemons.length !== 0;
-
-      if (checkParseCachePokemons) {
-        this.pokemons = parseCachePokemons;
-      } else {
-        this.getPokemons();
+      if (!cachePokemonsList || !cacheNavigationPageLinks) {
+        this.loadPokemons();
+        return;
       }
-    } else {
-      this.getPokemons();
-    }
+
+      const parseCachePokemonsList: Pokemon[] = JSON.parse(cachePokemonsList);
+      const parseCacheNavigationPageLinks: PageLinks = JSON.parse(
+        cacheNavigationPageLinks
+      );
+
+      const checkParseCachePokemons =
+        Array.isArray(parseCachePokemonsList) &&
+        parseCachePokemonsList.length !== 0;
+
+      const checkPrseCacheNavigationPageLinks =
+        typeof parseCacheNavigationPageLinks.previous === 'boolean' &&
+        typeof parseCacheNavigationPageLinks.next === 'boolean' &&
+        typeof parseCacheNavigationPageLinks.offset === 'number';
+
+      if (!checkParseCachePokemons || !checkPrseCacheNavigationPageLinks) {
+        this.loadPokemons();
+        return;
+      }
+
+      this.pokemons = parseCachePokemonsList;
+
+      this.pokemonSvc.setPageLinks(parseCacheNavigationPageLinks);
+    });
   }
 
-  private getPokemons(): void {
-    this.searchSvc
-      .getPokemons()
+  private loadPokemons() {
+    this.pokemonSvc
+      .getAllPokemons()
       .pipe(
         catchError((err: any) => {
           if (err instanceof Error) {
@@ -59,8 +90,16 @@ export class ViewPokemonsComponent implements OnInit {
         })
       )
       .subscribe((data) => {
-        const strPokemons = JSON.stringify(data);
-        window.sessionStorage.setItem(storagePokemons, strPokemons);
+        const navigationPageLinks = this.pokemonSvc.getNavigationPageLinks();
+
+        const strPokemonsList = JSON.stringify(data);
+        const strNavigationPageLinks = JSON.stringify(navigationPageLinks);
+
+        window.localStorage.setItem(storagePokemonsList, strPokemonsList);
+        window.localStorage.setItem(
+          storageNavigationPageLinks,
+          strNavigationPageLinks
+        );
 
         this.pokemons = data;
       });

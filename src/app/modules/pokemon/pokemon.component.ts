@@ -2,9 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { Store } from '@ngrx/store';
+
 import { PokemonDataService } from 'src/app/services';
-import { storagePokemon, storagePokemons } from 'src/assets/constants';
+import { storagePokemon } from 'src/assets/constants';
 import { capitalize } from 'src/app/utils/capitalize';
+import { addPokemon } from 'src/app/shared/state/adopt-pokemon/adopt-pokemon.actions';
+
 import type { Pokemon } from 'src/app/typings';
 
 @Component({
@@ -18,7 +22,11 @@ export class PokemonComponent implements OnInit {
 
   private readonly searchSvc = inject(PokemonDataService);
 
-  constructor(private router: ActivatedRoute, private titleSrv: Title) {}
+  constructor(
+    private router: ActivatedRoute,
+    private titleSrv: Title,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     this.router.paramMap.subscribe((params) => {
@@ -27,30 +35,16 @@ export class PokemonComponent implements OnInit {
       if (typeof titleName === 'string') {
         this.titleSrv.setTitle(capitalize(titleName));
 
-        const storedPokemonsList =
-          window.sessionStorage.getItem(storagePokemons);
-        const storedPokemon = window.sessionStorage.getItem(storagePokemon);
+        const storedPokemon = window.localStorage.getItem(storagePokemon);
 
-        if (storedPokemon) {
-          const parsePokemon: Pokemon = JSON.parse(storedPokemon);
-
-          this.pokemon = parsePokemon;
+        if (!storedPokemon) {
+          this.getPokemon(titleName);
           return;
         }
 
-        if (storedPokemonsList) {
-          const parsePokemonsList: Pokemon[] = JSON.parse(storedPokemonsList);
+        const parsePokemon: Pokemon = JSON.parse(storedPokemon);
 
-          const indexPokemon = parsePokemonsList.findIndex(
-            ({ name }) => name === titleName
-          );
-
-          if (indexPokemon !== -1) {
-            this.pokemon = parsePokemonsList[indexPokemon];
-          } else {
-            this.getPokemon(titleName);
-          }
-        }
+        this.pokemon = parsePokemon;
       } else {
         this.error = { state: true, msg: `${titleName} doesn't exist.` };
       }
@@ -75,6 +69,14 @@ export class PokemonComponent implements OnInit {
           );
         })
       )
-      .subscribe((pokemon) => (this.pokemon = pokemon));
+      .subscribe((pokemon) => {
+        this.pokemon = pokemon;
+
+        window.localStorage.setItem(storagePokemon, JSON.stringify(pokemon));
+      });
+  }
+
+  addPokemonToAdoptionList() {
+    this.store.dispatch(addPokemon({ pokemon: this.pokemon }));
   }
 }
