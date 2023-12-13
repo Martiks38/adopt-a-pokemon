@@ -19,50 +19,60 @@ import {
   FetchAllPokemonsResponse,
 } from 'src/app/typings/pokemon';
 import { getLimitPokemons } from 'src/assets/constants';
-import { NavigationPageLinks, PageLinks } from 'src/app/typings';
+import { PageLinks } from 'src/app/typings';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PokemonDataService {
   private baseUrl = environment.baseUrl;
-  private previous: NavigationPageLinks = null;
-  private next: NavigationPageLinks = null;
+  private pageLinks: PageLinks = { previous: false, next: false, offset: 0 };
 
   private offset = 0;
   private currentPageSubject = new BehaviorSubject<number>(0);
-  currentPage$ = this.currentPageSubject.asObservable();
+  public currentPage$ = this.currentPageSubject.asObservable();
 
   private totalPages = 0;
   private totalPagesSubject = new BehaviorSubject(0);
-  totalPages$ = this.totalPagesSubject.asObservable();
+  public totalPages$ = this.totalPagesSubject.asObservable();
 
   private readonly http = inject(HttpClient);
 
   getNavigationPageLinks(): PageLinks {
-    return { previous: this.previous, next: this.next };
+    return this.pageLinks;
   }
 
   getOffset() {
     return this.offset;
   }
 
-  setCurrentPageSubjectNext() {
-    this.offset += 1;
+  setPageLinks(pageLinks: PageLinks) {
+    this.pageLinks = pageLinks;
 
-    this.currentPageSubject.next(this.offset);
+    this.currentPageSubject.next(pageLinks.offset);
+  }
+
+  setCurrentPageSubjectNext() {
+    const numberNextPage = this.offset + 1;
+
+    this.offset = numberNextPage;
+
+    this.currentPageSubject.next(numberNextPage);
   }
 
   setCurrentPageSubjectPrevious() {
-    this.offset -= 1;
+    const numberPrevNextPage = this.offset - 1;
 
-    this.currentPageSubject.next(this.offset);
+    this.offset = numberPrevNextPage;
+
+    this.currentPageSubject.next(numberPrevNextPage);
   }
 
   setCurrentPage(pageNumber: number) {
-    this.offset = pageNumber - 1;
+    const currentPage = pageNumber - 1;
 
-    this.currentPageSubject.next(this.offset);
+    this.offset = currentPage;
+    this.currentPageSubject.next(currentPage);
   }
 
   private mappedPokemon(pokemon: PokemonData): Pokemon {
@@ -124,8 +134,11 @@ export class PokemonDataService {
     return this.http.get<FetchAllPokemonsResponse>(url).pipe(
       retry(1),
       tap((resApi) => {
-        this.next = resApi.next;
-        this.previous = resApi.previous;
+        this.pageLinks = {
+          previous: Boolean(resApi.previous),
+          next: Boolean(resApi.next),
+          offset: this.offset,
+        };
 
         if (this.totalPages === 0) {
           const pageNumber = Math.ceil(resApi.count / getLimitPokemons);
