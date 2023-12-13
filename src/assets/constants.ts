@@ -1,5 +1,6 @@
-export const storagePokemons = 'session-pokemons';
-export const storagePokemon = 'session-pokemon';
-export const storageOffsetPokemonList = 'session-offsetPokemonsList';
+export const storagePokemonsList = 'storage-pokemons';
+export const storagePokemon = 'storage-pokemon';
+export const storageNavigationPageLinks = 'storage-navigationPageLinks';
+export const storagePokemonState = 'storage-pokemonState';
 export const getLimitPokemons = 10;
 export const minCharactersPassword = 6;
