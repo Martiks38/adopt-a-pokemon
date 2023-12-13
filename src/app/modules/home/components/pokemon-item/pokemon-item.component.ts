@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import type { Pokemon } from 'src/app/typings/pokemon';
+import { storagePokemon } from 'src/assets/constants';
 
 @Component({
   selector: 'app-pokemon-item',
@@ -16,5 +17,9 @@ export class PokemonItemComponent {
 
   addAnimation() {
     this.isActive = true;
+  }
+
+  savePokemonData() {
+    window.localStorage.setItem(storagePokemon, JSON.stringify(this.pokemon));
   }
 }
