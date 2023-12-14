@@ -1,4 +1,4 @@
 export * from './home';
 export * from './pokemon';
 export * from './registers/login';
-export * from './registers/signin';
+export * from './registers/signup';

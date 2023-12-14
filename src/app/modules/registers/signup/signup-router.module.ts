@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SigninComponent } from './signin.component';
+import { SigninComponent } from './signup.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: SigninComponent },

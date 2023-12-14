@@ -10,11 +10,11 @@ import { minCharactersPassword } from 'src/assets/constants';
 type FormErrors = {};
 
 @Component({
-  selector: 'app-signin',
-  templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.scss'],
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss'],
 })
-export class SigninComponent {
+export class SignupComponent {
   minlengthPassword: number = minCharactersPassword;
 
   userForm: FormGroup;
