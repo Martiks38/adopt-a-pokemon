@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { selectQuantityPokemons } from '../state';
+import { selectGetUserPokemons, selectQuantityPokemons } from '../state';
 
 @Component({
   selector: 'app-header',
@@ -12,17 +11,9 @@ import { selectQuantityPokemons } from '../state';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
-  quantity: number = 0;
-  pokemonStore$: Observable<number> = new Observable();
+export class HeaderComponent {
+  quantity$ = this.store.select(selectQuantityPokemons);
+  user$ = this.store.select(selectGetUserPokemons);
 
-  constructor(private store: Store) {
-    this.pokemonStore$ = this.store.select(selectQuantityPokemons);
-  }
-
-  ngOnInit(): void {
-    this.pokemonStore$.subscribe(
-      (quantityOfPokemons) => (this.quantity = quantityOfPokemons)
-    );
-  }
+  constructor(private store: Store) {}
 }

@@ -3,13 +3,17 @@
     <a [routerLink]="['/']" aria-label="Go to the beginning">
       <img src="/assets/images/logo.png" alt="Adopt Pokémon" class="logo">
     </a>
-    <div>
-
+    <div class="menu">
+      <ng-container *ngIf="(user$ | async) === null">
+        <nav class="menu__navbar">
+          <a [routerLink]="['login']" class="menu__navbar__btn">Login</a>
+          <a [routerLink]="['signin']" class="menu__navbar__btn">Sign In</a>
+        </nav>
+      </ng-container>
       <a [routerLink]="['/']" aria-label="View adoption list" class="amountPokemons">
         <img class="amountPokemons__img" src="/assets/images/amountPokemon.png" alt="Number of pokemons to adopt">
-        <span class="amountPokemons__amount">{{quantity}}</span>
+        <span class="amountPokemons__amount">{{quantity$ | async}}</span>
       </a>
-      <!-- <span>Change mode y login</span> -->
     </div>
   </div>
 </header>

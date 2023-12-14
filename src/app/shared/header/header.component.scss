@@ -21,6 +21,31 @@
   }
 }
 
+.menu {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  &__navbar {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    color: var(--color-page-header);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.75rem;
+
+    &__btn {
+      padding: 0.2rem 0.6rem;
+
+      &:hover {
+        background-color: rgba(255 255 255 / 0.15);
+        border-radius: var(--radius-10);
+      }
+    }
+  }
+}
+
 .amountPokemons,
 .logo {
   width: auto;
@@ -32,8 +57,8 @@
 
   &__amount {
     position: absolute;
-    top: -0.25rem;
-    right: -0.25rem;
+    top: -0.6rem;
+    right: -0.6rem;
     color: #232323;
     font-size: 1.25rem;
   }

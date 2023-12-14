@@ -1,5 +1,5 @@
 :root {
-  --color-black: #2a2426;
+  --color-black: #221d1f;
   --content-width: 87.5rem;
   --size-logo: 2rem;
   --page-padding-x: 2rem;
@@ -9,6 +9,7 @@
   --bg-header-alpha-80: rgba(11, 147, 177, 0.8);
   --bg-body: #2a2426;
   --color: #dedede;
+  --color-page-header: var(--color-black);
   --bg-card-pokemon: #111717;
   --bg-card-pokemon-name: #af383a;
   --border-card-pokemon-name: #b89072;
@@ -81,5 +82,6 @@ ul {
     --bg-card-pokemon: #d5acca;
     --bg-card-pokemon-name: #f6ddc9;
     --border-card-pokemon-name: #74a2c6;
+    --color-page-header: #dedede;
   }
 }
