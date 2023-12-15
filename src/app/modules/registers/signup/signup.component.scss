@@ -9,6 +9,7 @@
   --shadow: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
   --bg-signup: url("/assets/images/bg-sign.jpg");
 
+  position: relative;
   background: var(--shadow), var(--bg-signup) center/cover no-repeat;
 }
 
@@ -53,6 +54,35 @@
 
     &:hover {
       background-color: #4cb6dd;
+    }
+  }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  place-content: center;
+  width: 2rem;
+  height: 2rem;
+
+  &__cross {
+    display: block;
+    width: inherit;
+    height: 6px;
+    background-color: rgb(255 255 255);
+    border-radius: 3px;
+    transform: rotate(45deg);
+
+    &::before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform: rotate(90deg);
+      background-color: inherit;
+      border-radius: 3px;
     }
   }
 }
