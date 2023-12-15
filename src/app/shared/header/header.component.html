@@ -7,7 +7,7 @@
       <ng-container *ngIf="(user$ | async) === null">
         <nav class="menu__navbar">
           <a [routerLink]="['login']" class="menu__navbar__btn">Login</a>
-          <a [routerLink]="['signin']" class="menu__navbar__btn">Sign In</a>
+          <a [routerLink]="['signup']" class="menu__navbar__btn">Sign Up</a>
         </nav>
       </ng-container>
       <a [routerLink]="['/']" aria-label="View adoption list" class="amountPokemons">

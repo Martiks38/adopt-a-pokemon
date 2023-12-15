@@ -7,9 +7,9 @@
 
 .wrapperForm {
   --shadow: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-  --bg-signin: url("/assets/images/bg-sign.jpg");
+  --bg-signup: url("/assets/images/bg-sign.jpg");
 
-  background: var(--shadow), var(--bg-signin) center/cover no-repeat;
+  background: var(--shadow), var(--bg-signup) center/cover no-repeat;
 }
 
 .form {

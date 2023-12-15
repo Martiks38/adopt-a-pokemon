@@ -13,8 +13,8 @@ const routes: Routes = [
     loadChildren: () => import('./modules').then((m) => m.LoginModule),
   },
   {
-    path: 'signin',
-    loadChildren: () => import('./modules').then((m) => m.SigninModule),
+    path: 'signup',
+    loadChildren: () => import('./modules').then((m) => m.SignupModule),
   },
   {
     path: 'pokemon/:pokemon',
