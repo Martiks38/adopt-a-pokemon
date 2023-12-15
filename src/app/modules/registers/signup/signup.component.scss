@@ -68,11 +68,13 @@
   height: 2rem;
 
   &__cross {
+    --height-line: 6px;
+
     display: block;
     width: inherit;
-    height: 6px;
+    height: var(--height-line);
     background-color: rgb(255 255 255);
-    border-radius: 3px;
+    border-radius: calc(var(--height-line) / 2);
     transform: rotate(45deg);
 
     &::before {
@@ -80,9 +82,9 @@
       display: block;
       width: 100%;
       height: 100%;
-      transform: rotate(90deg);
       background-color: inherit;
-      border-radius: 3px;
+      border-radius: inherit;
+      transform: rotate(90deg);
     }
   }
 }
