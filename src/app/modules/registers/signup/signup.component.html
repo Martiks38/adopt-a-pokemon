@@ -3,17 +3,24 @@
     <a [routerLink]="['../']" class="closeBtn">
       <span class="closeBtn__cross"></span>
     </a>
-    <form [formGroup]="userForm" class="form">
+    <form [formGroup]="userForm" class="form" (ngSubmit)="onSubmit($event)">
       <label for="username" class="form__label">Add your email</label>
       <input formControlName="email" type="text" name="email" class="form__input" required>
       <label for="password" class="form__label">Choose a password</label>
       <input formControlName="password" type="password" name="password" [minLength]="minlengthPassword"
         class="form__input" required>
       <button class="form__button" type="submit">Continue</button>
-      <aside *ngIf="false">
-        <p>You must complete all fields.</p>
-        <p>The password must be at least {{minlengthPassword}} characters.</p>
-        <p>The email address is not valid.</p>
+      <aside class="errors" *ngIf="errors.email || errors.password || errors.isInvalidConnection">
+        <p *ngIf="errors.email?.required">It's necessary to enter the email.</p>
+        <p *ngIf="errors.password?.required">It's necessary to enter the password.</p>
+        <p *ngIf="errors.email?.email">The entered email is not valid.</p>
+        <p *ngIf="errors.password?.minlength">The entered password is not valid; it must have a minimum of
+          {{minlengthPassword}}
+          characters.
+        </p>
+        <p *ngIf="errors.isInvalidConnection !== null && errors.isInvalidConnection">
+          The email or password is not valid.
+        </p>
       </aside>
     </form>
   </section>

@@ -5,9 +5,28 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
+import { UserService } from 'src/app/services/user/user.service';
 import { minCharactersPassword } from 'src/assets/constants';
 
-type FormErrors = {};
+type FormErrors = {
+  email: {
+    email?: boolean;
+    required?: boolean;
+  } | null;
+  password: {
+    minlength?: { requiredLength: number; actualLength: number };
+    required?: boolean;
+  } | null;
+  isInvalidConnection: boolean | null;
+};
+
+const initialErrors = {
+  email: null,
+  password: null,
+  isInvalidConnection: null,
+};
 
 @Component({
   selector: 'app-signup',
@@ -18,9 +37,13 @@ export class SignupComponent {
   minlengthPassword: number = minCharactersPassword;
 
   userForm: FormGroup;
-  errors: FormErrors | null = null;
+  errors: FormErrors = initialErrors;
 
-  constructor(private readonly formBuilder: FormBuilder) {
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private userSvc: UserService,
+    private router: Router
+  ) {
     this.userForm = this.formBuilder.group({
       email: new FormControl('', {
         validators: [Validators.required, Validators.email],
@@ -44,6 +67,30 @@ export class SignupComponent {
     const invalidPassword = password?.invalid;
 
     if (invalidEmail) {
+      this.errors = { ...this.errors, email: email.errors };
+    } else {
+      this.errors = { ...this.errors, email: null };
     }
+
+    if (invalidPassword) {
+      this.errors = { ...this.errors, password: password.errors };
+    } else {
+      this.errors = { ...this.errors, password: null };
+    }
+
+    this.userSvc
+      .loginUser({ email: email?.value, password: password?.value })
+      .pipe(
+        catchError((err: any) => {
+          this.errors = { ...initialErrors, isInvalidConnection: !err?.state };
+
+          return throwError(() => err?.msg);
+        })
+      )
+      .subscribe(({ state }) => {
+        this.errors = { ...initialErrors, isInvalidConnection: !state };
+
+        this.router.navigate(['../']);
+      });
   }
 }
