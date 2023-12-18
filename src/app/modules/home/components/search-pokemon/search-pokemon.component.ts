@@ -32,7 +32,6 @@ export class SearchPokemonComponent {
   pokemonForm: FormGroup;
   minLength: number = 4;
   maxLength: number = 15;
-  isInvalid: boolean = false;
   errors: ValidatorSearchPokemon | null | undefined = null;
 
   constructor(
@@ -64,35 +63,34 @@ export class SearchPokemonComponent {
     if (typeof value !== 'string') return;
     const namePokemon = value.trim().toLowerCase();
 
-    this.errors = errors;
-
     if (invalid) {
-      this.isInvalid = invalid;
-    } else {
-      this.pokemonService
-        .getPokemon(namePokemon)
-        .pipe(
-          catchError((err) => {
-            return throwError(
-              () => new Error(`The pokémon ${namePokemon} doesn't exist.`)
-            );
-          })
-        )
-        .subscribe({
-          next: (pokemon) => {
-            const strPokemon = JSON.stringify(pokemon);
-
-            window.sessionStorage.setItem(storagePokemon, strPokemon);
-
-            this.router.navigate(['pokemon', namePokemon]);
-          },
-          error: (err) => {
-            this.errors = {
-              ...this.errors,
-              notExist: namePokemon,
-            };
-          },
-        });
+      this.errors = errors;
+      return;
     }
+
+    this.pokemonService
+      .getPokemon(namePokemon)
+      .pipe(
+        catchError((err) => {
+          return throwError(
+            () => new Error(`The pokémon ${namePokemon} doesn't exist.`)
+          );
+        })
+      )
+      .subscribe({
+        next: (pokemon) => {
+          const strPokemon = JSON.stringify(pokemon);
+
+          window.sessionStorage.setItem(storagePokemon, strPokemon);
+
+          this.router.navigate(['pokemon', namePokemon]);
+        },
+        error: (err) => {
+          this.errors = {
+            ...this.errors,
+            notExist: namePokemon,
+          };
+        },
+      });
   }
 }
