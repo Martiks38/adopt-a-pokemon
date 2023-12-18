@@ -13,3 +13,8 @@ export const selectQuantityPokemons = createSelector(
   selectPokemonsState,
   (state: AdoptPokemonState) => state.quantityPokemons
 );
+
+export const selectGetUserPokemons = createSelector(
+  selectPokemonsState,
+  (state: AdoptPokemonState) => state.user
+);
