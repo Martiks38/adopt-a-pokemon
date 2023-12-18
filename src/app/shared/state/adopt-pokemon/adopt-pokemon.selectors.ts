@@ -16,5 +16,5 @@ export const selectQuantityPokemons = createSelector(
 
 export const selectGetUserPokemons = createSelector(
   selectPokemonsState,
-  (state: AdoptPokemonState) => state.user
+  (state: AdoptPokemonState) => state.userConnection
 );

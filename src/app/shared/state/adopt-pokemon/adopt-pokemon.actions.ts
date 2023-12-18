@@ -6,6 +6,11 @@ export const addPokemon = createAction(
   props<{ pokemon: Pokemon }>()
 );
 
+export const changeUserConnection = createAction(
+  '[Connection User] Change User Connection',
+  props<{ connection: Boolean }>
+);
+
 export const retrievedPokemonsList = createAction(
   '[Pokemons List] Retrieve Pokemons Success',
   props<{ pokemons: ReadonlyArray<Pokemon> }>()

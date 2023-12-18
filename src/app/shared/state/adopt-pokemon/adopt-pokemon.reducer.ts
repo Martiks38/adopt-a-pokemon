@@ -1,20 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
-import { addPokemon } from './adopt-pokemon.actions';
-import { storagePokemonState, storageUser } from 'src/assets/constants';
-import type { Pokemon, UserInformation } from 'src/app/typings';
+import { addPokemon, changeUserConnection } from './adopt-pokemon.actions';
+import { storagePokemonState } from 'src/assets/constants';
 import type { AdoptPokemonState } from './adopt-pokemon.model';
 
 const initialStatePokemon = window.localStorage.getItem(storagePokemonState);
-const initialStatePokemonUser = window.localStorage.getItem(storageUser);
-const userData: UserInformation = initialStatePokemonUser
-  ? JSON.parse(initialStatePokemonUser)
-  : null;
 const parseInitialStatePokemon: AdoptPokemonState = initialStatePokemon
   ? JSON.parse(initialStatePokemon)
   : {
       pokemonsList: [],
       quantityPokemons: 0,
-      user: userData,
+      userConnection: false,
     };
 
 export const initialState: AdoptPokemonState = parseInitialStatePokemon;
@@ -34,6 +29,12 @@ export const pokemonsReducer = createReducer(
     window.localStorage.setItem(storagePokemonState, JSON.stringify(newState));
 
     return newState;
+  }),
+  on(changeUserConnection, (state) => {
+    const newState = { ...state, userConnection: !state.userConnection };
+
+    window.localStorage.setItem(storagePokemonState, JSON.stringify(newState));
+
+    return newState;
   })
-  // on(retrievedPokemonsList, (state, { pokemons }) => state.concat(pokemons))
 );
