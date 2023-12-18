@@ -4,12 +4,15 @@
       <img src="/assets/images/logo.png" alt="Adopt Pokémon" class="logo">
     </a>
     <div class="menu">
-      <ng-container *ngIf="(user$ | async) === null">
-        <nav class="menu__navbar">
+      <nav class="menu__navbar">
+        <ng-container *ngIf="(user$ | async) === false; else signOut">
           <a [routerLink]="['login']" class="menu__navbar__btn">Login</a>
           <a [routerLink]="['signup']" class="menu__navbar__btn">Sign Up</a>
-        </nav>
-      </ng-container>
+        </ng-container>
+        <ng-template #signOut>
+          <button (click)="logout()" class="menu__navbar__btn">Log out</button>
+        </ng-template>
+      </nav>
       <a [routerLink]="['/']" aria-label="View adoption list" class="amountPokemons">
         <img class="amountPokemons__img" src="/assets/images/amountPokemon.png" alt="Number of pokemons to adopt">
         <span class="amountPokemons__amount">{{quantity$ | async}}</span>

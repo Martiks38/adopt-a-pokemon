@@ -6,8 +6,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { catchError, throwError } from 'rxjs';
 import { UserService } from 'src/app/services/user/user.service';
+import { changeUserConnection } from 'src/app/shared/state';
 import { minCharactersPassword } from 'src/assets/constants';
 
 type FormErrors = {
@@ -42,7 +44,8 @@ export class SignupComponent {
   constructor(
     private readonly formBuilder: FormBuilder,
     private userSvc: UserService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {
     this.userForm = this.formBuilder.group({
       email: new FormControl('', {
@@ -89,6 +92,7 @@ export class SignupComponent {
       )
       .subscribe(({ state }) => {
         this.errors = { ...initialErrors, isInvalidConnection: !state };
+        this.store.dispatch(changeUserConnection());
 
         this.router.navigate(['../']);
       });

@@ -2,7 +2,11 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectGetUserPokemons, selectQuantityPokemons } from '../state';
+import {
+  changeUserConnection,
+  selectGetUserPokemons,
+  selectQuantityPokemons,
+} from '../state';
 
 @Component({
   selector: 'app-header',
@@ -16,4 +20,8 @@ export class HeaderComponent {
   user$ = this.store.select(selectGetUserPokemons);
 
   constructor(private store: Store) {}
+
+  logout() {
+    this.store.dispatch(changeUserConnection());
+  }
 }

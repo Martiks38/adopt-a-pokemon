@@ -37,10 +37,12 @@
 
     &__btn {
       padding: 0.2rem 0.6rem;
+      background-color: transparent;
+      border-width: 0;
+      border-radius: var(--radius-10);
 
       &:hover {
         background-color: rgba(255 255 255 / 0.15);
-        border-radius: var(--radius-10);
       }
     }
   }
