@@ -22,21 +22,35 @@ export class UserService {
   loginUser(formData: UserInformation): Observable<Response> {
     const { email, password } = formData;
 
+    if (!email || !password) {
+      return new Observable((observer) => {
+        observer.error({
+          state: false,
+          msg: 'The email and/or password are incorrect.',
+        });
+        observer.complete();
+      });
+    }
+
     const user = this.users.find(
       (user: UserInformation) => user.email === email
     );
 
     return new Observable((observer) => {
-      if (user && user.password === password) {
-        observer.next({
-          state: true,
-          msg: 'User logged in.',
-        });
+      const isValidConection = Boolean(user && user.password === password);
+      const msg = isValidConection
+        ? 'User logged in.'
+        : 'The email and/or password are incorrect.';
+
+      const response: Response = {
+        state: isValidConection,
+        msg,
+      };
+
+      if (isValidConection) {
+        observer.next(response);
       } else {
-        observer.error({
-          state: false,
-          msg: 'The email and/or password are incorrect.',
-        });
+        observer.error(response);
       }
 
       observer.complete();
