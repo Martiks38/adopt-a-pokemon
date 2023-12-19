@@ -3,10 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './modules';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
-    path: '',
+    path: 'home',
     component: HomeComponent,
-    pathMatch: 'full',
   },
   {
     path: 'login',
