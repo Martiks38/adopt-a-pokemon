@@ -65,8 +65,13 @@
     font-size: 1.25rem;
   }
 
+  &__containerImg,
   &__img {
     height: inherit;
+  }
+
+  &__containerImg:hover {
+    filter: drop-shadow(0 0 1px rgb(207, 201, 16));
   }
 }
 
