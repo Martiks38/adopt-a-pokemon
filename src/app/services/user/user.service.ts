@@ -73,7 +73,9 @@ export class UserService {
 
     const cpyUsers = structuredClone(this.users);
 
-    this.users = [...cpyUsers, formData];
+    cpyUsers.push(formData);
+
+    this.users = cpyUsers;
 
     return new Observable((observer) => {
       setTimeout(() => {

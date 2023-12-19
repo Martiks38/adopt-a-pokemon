@@ -1,6 +1,6 @@
 <main class="mainContainer">
   <section class="wrapperForm">
-    <a [routerLink]="['../']" class="closeBtn">
+    <a routerLink="/" class="closeBtn">
       <span class="closeBtn__cross"></span>
     </a>
     <form [formGroup]="userForm" class="form" (ngSubmit)="onSubmit($event)">
@@ -19,7 +19,8 @@
           characters.
         </p>
         <p *ngIf="errors.isInvalidConnection !== null && errors.isInvalidConnection">
-          The email or password is not valid.
+          The user already exists.
+          <!-- The email or password is not valid. -->
         </p>
       </aside>
     </form>

@@ -82,7 +82,7 @@ export class SignupComponent {
     }
 
     this.userSvc
-      .loginUser({ email: email?.value, password: password?.value })
+      .createUser({ email: email?.value, password: password?.value })
       .pipe(
         catchError((err: any) => {
           this.errors = { ...initialErrors, isInvalidConnection: !err?.state };
