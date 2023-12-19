@@ -69,7 +69,16 @@ export class ViewPokemonsComponent implements OnInit {
 
       this.pokemons = parseCachePokemonsList;
 
-      this.pokemonSvc.setPageLinks(parseCacheNavigationPageLinks);
+      const { next, previous, offset } =
+        this.pokemonSvc.getNavigationPageLinks();
+      const checkNavigationPageLinks =
+        parseCacheNavigationPageLinks.next !== next ||
+        parseCacheNavigationPageLinks.previous !== previous ||
+        parseCacheNavigationPageLinks.offset !== offset;
+
+      if (checkNavigationPageLinks) {
+        this.pokemonSvc.setNavigationPageLinks(parseCacheNavigationPageLinks);
+      }
     });
   }
 

@@ -46,7 +46,7 @@ export class PokemonDataService {
     return this.offset;
   }
 
-  setPageLinks(pageLinks: PageLinks) {
+  setNavigationPageLinks(pageLinks: PageLinks) {
     this.pageLinks = pageLinks;
 
     this.currentPageSubject.next(pageLinks.offset);
