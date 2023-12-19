@@ -6,8 +6,8 @@
     <div class="menu">
       <nav class="menu__navbar">
         <ng-container *ngIf="(user$ | async) === false; else signOut">
-          <a [routerLink]="['login']" class="menu__navbar__btn">Login</a>
-          <a [routerLink]="['signup']" class="menu__navbar__btn">Sign Up</a>
+          <a routerLink="/login" class="menu__navbar__btn">Login</a>
+          <a routerLink="/signup" class="menu__navbar__btn">Sign Up</a>
         </ng-container>
         <ng-template #signOut>
           <button (click)="logout()" class="menu__navbar__btn">Log out</button>
