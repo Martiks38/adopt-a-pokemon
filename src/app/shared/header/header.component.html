@@ -1,6 +1,6 @@
 <header class="header">
   <div class="header__content">
-    <a routerLink="/" aria-label="Go to the beginning">
+    <a routerLink="" aria-label="Go to the beginning">
       <img src="/assets/images/logo.png" alt="Adopt Pokémon" class="logo">
     </a>
     <div class="menu">
@@ -13,7 +13,7 @@
           <button (click)="logout()" class="menu__navbar__btn">Log out</button>
         </ng-template>
       </nav>
-      <a [routerLink]="['/']" aria-label="View adoption list" class="amountPokemons">
+      <a routerLink="/pokemons" aria-label="View adoption list" class="amountPokemons">
         <div class="amountPokemons__containerImg">
           <img class="amountPokemons__img" src="/assets/images/amountPokemon.png" alt="Number of pokemons to adopt">
         </div>
