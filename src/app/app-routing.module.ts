@@ -7,8 +7,7 @@ const routes: Routes = [
   {
     path: 'pokemons',
     canActivate: [pokemonListGuardGuard],
-    // Modificar según la ruta
-    loadChildren: () => import('./modules').then((m) => m.SignupModule),
+    loadChildren: () => import('./modules').then((m) => m.PokemonsModule),
   },
   {
     path: 'login',
