@@ -1,5 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
-import { addPokemon, changeUserConnection } from './adopt-pokemon.actions';
+import {
+  addPokemon,
+  changeUserConnection,
+  removePokemon,
+} from './adopt-pokemon.actions';
 import { storagePokemonState } from 'src/assets/constants';
 import type { AdoptPokemonState } from './adopt-pokemon.model';
 
@@ -24,6 +28,29 @@ export const pokemonsReducer = createReducer(
       ...state,
       pokemonsList: updatePokemonsList,
       quantityPokemons: updatePokemonsList.length,
+    };
+
+    window.localStorage.setItem(storagePokemonState, JSON.stringify(newState));
+
+    return newState;
+  }),
+  on(removePokemon, (state, { pokemon }) => {
+    const pokemonsListClone = structuredClone(state.pokemonsList);
+
+    const indPokemon = pokemonsListClone.findIndex(
+      (p) => p.name === pokemon.name
+    );
+
+    if (indPokemon === -1) {
+      return state;
+    }
+
+    pokemonsListClone.splice(indPokemon, 1);
+
+    const newState = {
+      ...state,
+      pokemonsList: pokemonsListClone,
+      quantityPokemons: pokemonsListClone.length,
     };
 
     window.localStorage.setItem(storagePokemonState, JSON.stringify(newState));

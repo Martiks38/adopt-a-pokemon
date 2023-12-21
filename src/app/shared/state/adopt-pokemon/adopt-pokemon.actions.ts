@@ -6,6 +6,11 @@ export const addPokemon = createAction(
   props<{ pokemon: Pokemon }>()
 );
 
+export const removePokemon = createAction(
+  '[Pokemons Adopted] Remove Pokemon',
+  props<{ pokemon: Pokemon }>()
+);
+
 export const changeUserConnection = createAction(
   '[Connection User] Change User Connection',
   props<{ connection: Boolean }>
