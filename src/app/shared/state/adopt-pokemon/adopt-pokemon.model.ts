@@ -1,7 +1,7 @@
 import type { Pokemon } from 'src/app/typings';
 
 export interface AdoptPokemonState {
-  pokemonsList: ReadonlyArray<Pokemon>;
+  pokemonsList: Pokemon[];
   quantityPokemons: number;
   userConnection: boolean;
 }
