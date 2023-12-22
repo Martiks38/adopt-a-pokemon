@@ -1,0 +1,32 @@
+<app-header />
+
+<app-main-container>
+  <main>
+    <h1 class="title">Adoption List</h1>
+    <div class="container">
+      <ng-container *ngIf="adoptedPokemons$ | async as pokemons">
+        <ng-container *ngIf="pokemons | filterUnique as uniquePokemons">
+          <ul class="pokemonsList">
+            <li *ngFor="let pokemon of uniquePokemons" class="pokemonsList__item">
+              <a [routerLink]="['/pokemon', pokemon.pokemon.name]">
+                <img class="pokemonsList__item__img"
+                  [src]="pokemon.pokemon.sprites.other['official-artwork'].front_default || pokemon.pokemon.sprites.front_default"
+                  [alt]="pokemon.pokemon.name">
+              </a>
+              <span class="pokemonsList__item__amount" [ariaLabel]="pokemon.amount">{{pokemon.amount}}</span>
+              <button (click)="removePokemonToAdoptionList(pokemon.pokemon)" class="pokemonsList__item__btn">Adopt
+                less</button>
+            </li>
+          </ul>
+        </ng-container>
+
+        <div class="panelBtns">
+          <button class="panelBtns_btn" [disabled]="pokemons.length === 0"
+            [title]="pokemons.length === 0 ? 'There are no pokemon to adopt.' : ''">Adopt</button>
+          <button class="panelBtns_btn" (click)="clearList()">Clear list</button>
+        </div>
+      </ng-container>
+      <a routerLink="" class="btnToHome">Home</a>
+    </div>
+  </main>
+</app-main-container>
