@@ -5,20 +5,18 @@
     <h1 class="title">Adoption List</h1>
     <div class="container">
       <ng-container *ngIf="adoptedPokemons$ | async as pokemons">
-        <ng-container *ngIf="pokemons | filterUnique as uniquePokemons">
-          <ul class="pokemonsList">
-            <li *ngFor="let pokemon of uniquePokemons" class="pokemonsList__item">
-              <a [routerLink]="['/pokemon', pokemon.pokemon.name]">
-                <img class="pokemonsList__item__img"
-                  [src]="pokemon.pokemon.sprites.other['official-artwork'].front_default || pokemon.pokemon.sprites.front_default"
-                  [alt]="pokemon.pokemon.name">
-              </a>
-              <span class="pokemonsList__item__amount" [ariaLabel]="pokemon.amount">{{pokemon.amount}}</span>
-              <button (click)="removePokemonToAdoptionList(pokemon.pokemon)" class="pokemonsList__item__btn">Adopt
-                less</button>
-            </li>
-          </ul>
-        </ng-container>
+        <ul class="pokemonsList">
+          <li *ngFor="let pokemon of pokemons" class="pokemonsList__item">
+            <a [routerLink]="['/pokemon', pokemon.pokemon.name]">
+              <img class="pokemonsList__item__img"
+                [src]="pokemon.pokemon.sprites.other['official-artwork'].front_default || pokemon.pokemon.sprites.front_default"
+                [alt]="pokemon.pokemon.name">
+            </a>
+            <span class="pokemonsList__item__amount" [ariaLabel]="pokemon.amount">{{pokemon.amount}}</span>
+            <button (click)="removePokemonToAdoptionList(pokemon.pokemon)" class="pokemonsList__item__btn">Adopt
+              less</button>
+          </li>
+        </ul>
 
         <div class="panelBtns">
           <button class="panelBtns_btn" [disabled]="pokemons.length === 0"

@@ -1,7 +1,7 @@
 import type { Pokemon } from 'src/app/typings';
 
 export interface AdoptPokemonState {
-  pokemonsList: Pokemon[];
+  pokemonsList: { pokemon: Pokemon; amount: number }[];
   quantityPokemons: number;
   userConnection: boolean;
 }
