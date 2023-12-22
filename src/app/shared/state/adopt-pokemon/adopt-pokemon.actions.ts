@@ -20,3 +20,7 @@ export const retrievedPokemonsList = createAction(
   '[Pokemons List] Retrieve Pokemons Success',
   props<{ pokemons: ReadonlyArray<Pokemon> }>()
 );
+
+export const clearPokemonsList = createAction(
+  '[Pokemons List] Clear Pokemons List'
+);
