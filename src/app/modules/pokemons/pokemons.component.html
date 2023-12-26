@@ -1,7 +1,7 @@
 <app-header />
 
 <app-main-container>
-  <main>
+  <div class="mainContent">
     <h1 class="title">Adoption List</h1>
     <div class="container">
       <ng-container *ngIf="adoptedPokemons$ | async as pokemons">
@@ -26,5 +26,5 @@
       </ng-container>
       <a routerLink="" class="btnToHome">Home</a>
     </div>
-  </main>
+  </div>
 </app-main-container>
