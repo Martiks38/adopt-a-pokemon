@@ -3,8 +3,8 @@
     formControlName="namePokemon" [minlength]="minLength">
   <div class="error" *ngIf="errors">
     <p *ngIf="errors?.required">Enter the name of the Pokémon, please.</p>
-    <p *ngIf="errors?.minlength">The name must be at least {{this.minLength}}
-    <p *ngIf="errors?.maxlength">The name must be at least {{this.maxLength}}
+    <p *ngIf="errors?.minlength?.requiredLength">The name must be at least {{this.minLength}}
+    <p *ngIf="errors?.maxlength?.requiredLength">The name must be at least {{this.maxLength}}
       characters.</p>
     <p *ngIf="errors?.onlyLetters">The name must be at least characters.</p>
     <p *ngIf="errors?.notExist">The pokémon {{errors.notExist | titlecase}} doesn't exist.</p>

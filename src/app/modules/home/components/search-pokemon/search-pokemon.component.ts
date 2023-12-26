@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 import { PokemonDataService } from 'src/app/services';
 import { CustomValidators } from 'src/app/validators/customValidators';
 import { storagePokemon } from 'src/assets/constants';
@@ -61,6 +61,7 @@ export class SearchPokemonComponent {
     const { invalid, value, errors } = namePokemonInput;
 
     if (typeof value !== 'string') return;
+
     const namePokemon = value.trim().toLowerCase();
 
     if (invalid) {
@@ -72,25 +73,22 @@ export class SearchPokemonComponent {
       .getPokemon(namePokemon)
       .pipe(
         catchError((err) => {
+          this.errors = {
+            notExist: namePokemon,
+          };
+
           return throwError(
             () => new Error(`The pokémon ${namePokemon} doesn't exist.`)
           );
-        })
-      )
-      .subscribe({
-        next: (pokemon) => {
+        }),
+        tap((pokemon) => {
           const strPokemon = JSON.stringify(pokemon);
 
           window.sessionStorage.setItem(storagePokemon, strPokemon);
 
           this.router.navigate(['pokemon', namePokemon]);
-        },
-        error: (err) => {
-          this.errors = {
-            ...this.errors,
-            notExist: namePokemon,
-          };
-        },
-      });
+        })
+      )
+      .subscribe();
   }
 }
