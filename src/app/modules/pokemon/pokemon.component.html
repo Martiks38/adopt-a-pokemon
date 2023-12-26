@@ -4,7 +4,7 @@
   <div class="bgPokemon"></div>
   <div class="pokemonContainer">
     <div class="pokemon">
-      <ng-container *ngIf="pokemon">
+      <ng-container *ngIf="pokemon; else pokemonLoader">
         <img class="pokemon__img"
           [src]="pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default"
           [alt]="pokemon.name" loading="eager">
@@ -31,6 +31,9 @@
           <button (click)="addPokemonToAdoptionList()" class="button__adopt">Adopt</button>
         </article>
       </ng-container>
+      <ng-template #pokemonLoader>
+        <app-loader />
+      </ng-template>
     </div>
   </div>
 </app-main-container>

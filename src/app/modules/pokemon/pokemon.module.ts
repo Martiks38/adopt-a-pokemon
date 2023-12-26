@@ -4,7 +4,7 @@ import { PokemonComponent } from './pokemon.component';
 import { PokemonRoutingModule } from './pokemon-router.module';
 import { CapitalizePipe } from 'src/app/pipes/capitalize.pipe';
 import { ListFormPipe } from 'src/app/pipes/listForm.pipe';
-import { HeaderComponent } from 'src/app/shared';
+import { HeaderComponent, LoaderComponent } from 'src/app/shared';
 import { MainContainerComponent } from 'src/app/shared/main-container';
 
 @NgModule({
@@ -14,6 +14,7 @@ import { MainContainerComponent } from 'src/app/shared/main-container';
     PokemonRoutingModule,
     HeaderComponent,
     MainContainerComponent,
+    LoaderComponent,
   ],
 })
 export class PokemonModule {}
