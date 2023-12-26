@@ -24,13 +24,14 @@
 .menu {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 1rem;
+  color: var(--color-page-header);
 
   &__navbar {
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    color: var(--color-page-header);
     font-size: 1.25rem;
     font-weight: 700;
     line-height: 1.75rem;

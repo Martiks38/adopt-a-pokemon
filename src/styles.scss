@@ -1,5 +1,6 @@
 :root {
   --color-black: #221d1f;
+  --color-white: #dedede;
   --content-width: 87.5rem;
   --size-logo: 2rem;
   --page-padding-x: 2rem;
@@ -41,6 +42,18 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+body.light {
+  --bg-header: #a82a2d;
+  --bg-header-alpha-50: rgb(168 41 43 / 0.5);
+  --bg-header-alpha-80: rgb(168 41 43 / 0.8);
+  --bg-body: #fcfbff;
+  --color: #232323;
+  --bg-card-pokemon: #d5acca;
+  --bg-card-pokemon-name: #f6ddc9;
+  --border-card-pokemon-name: #74a2c6;
+  --color-page-header: #dedede;
+}
+
 img,
 picture,
 figure,
@@ -70,18 +83,4 @@ ul {
 
 #root {
   isolation: isolate;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg-header: #a82a2d;
-    --bg-header-alpha-50: rgb(168 41 43 / 0.5);
-    --bg-header-alpha-80: rgb(168 41 43 / 0.8);
-    --bg-body: #fcfbff;
-    --color: #232323;
-    --bg-card-pokemon: #d5acca;
-    --bg-card-pokemon-name: #f6ddc9;
-    --border-card-pokemon-name: #74a2c6;
-    --color-page-header: #dedede;
-  }
 }

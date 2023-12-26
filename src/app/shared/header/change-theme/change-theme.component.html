@@ -1,0 +1,10 @@
+<button class="themeBtn" [attr.aria-label]="changeTo" (click)="changeTheme()">
+  <div class="containerIcons" [style]="turnStyle">
+    <svg>
+      <use href="/assets/images/themes.svg#moon"></use>
+    </svg>
+    <svg>
+      <use href="/assets/images/themes.svg#sun"></use>
+    </svg>
+  </div>
+</button>

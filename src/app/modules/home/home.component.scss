@@ -24,6 +24,7 @@
 .title {
   padding-top: 1em;
   margin: 0;
+  color: var(--color-white);
   font-size: 4.5rem;
   line-height: 1;
   text-align: center;
@@ -36,10 +37,11 @@
   max-width: 55ch;
   width: 100%;
   background-color: rgba(41 36 37 / 0.5);
-  backdrop-filter: blur(5px);
-  border-radius: var(--radius-8);
+  color: var(--color-white);
   font-size: 1.25rem;
   line-height: 1.75rem;
+  border-radius: var(--radius-8);
+  backdrop-filter: blur(5px);
 
   &__paragraph {
     margin: 0;

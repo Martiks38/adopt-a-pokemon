@@ -4,6 +4,7 @@
       <img src="/assets/images/logo.png" alt="Adopt Pokémon" class="logo">
     </a>
     <div class="menu">
+      <app-change-theme />
       <nav class="menu__navbar">
         <ng-container *ngIf="(user$ | async) === false; else signOut">
           <a routerLink="/login" class="menu__navbar__btn">Login</a>

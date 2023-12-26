@@ -1,0 +1,27 @@
+.themeBtn {
+  --size: 2rem;
+
+  padding: 0;
+  width: 80px;
+  height: var(--size);
+  background-color: transparent;
+  color: inherit;
+  border-width: 0;
+  overflow: hidden;
+}
+
+.containerIcons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 auto;
+  color: inherit;
+  width: var(--size);
+  height: calc(2 * var(--size) + 2rem);
+  transition: transform linear 500ms;
+
+  & > svg {
+    height: 32px;
+    width: 32px;
+  }
+}
