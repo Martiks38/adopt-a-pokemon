@@ -30,6 +30,7 @@ export class ChangeThemeComponent implements OnInit {
 
     if (theme === light) {
       this.body.classList.add(lightClass);
+      this.turn += 1;
     }
   }
 
