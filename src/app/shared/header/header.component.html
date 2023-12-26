@@ -4,7 +4,7 @@
       <img src="/assets/images/logo.png" alt="Adopt Pokémon" class="logo">
     </a>
     <div class="menu">
-      <app-change-theme />
+
       <nav class="menu__navbar">
         <ng-container *ngIf="(user$ | async) === false; else signOut">
           <a routerLink="/login" class="menu__navbar__btn">Login</a>
@@ -14,6 +14,9 @@
           <button (click)="logout()" class="menu__navbar__btn">Log out</button>
         </ng-template>
       </nav>
+
+      <app-change-theme />
+
       <a routerLink="/pokemons" aria-label="View adoption list" class="amountPokemons">
         <div class="amountPokemons__containerImg">
           <img class="amountPokemons__img" src="/assets/images/amountPokemon.png" alt="Number of pokemons to adopt">
