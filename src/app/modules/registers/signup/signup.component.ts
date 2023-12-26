@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { catchError, throwError } from 'rxjs';
@@ -35,13 +36,14 @@ const initialErrors = {
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
   minlengthPassword: number = minCharactersPassword;
 
   userForm: FormGroup;
   errors: FormErrors = initialErrors;
 
   constructor(
+    private readonly titleSrv: Title,
     private readonly formBuilder: FormBuilder,
     private userSvc: UserService,
     private router: Router,
@@ -58,6 +60,10 @@ export class SignupComponent {
         ],
       }),
     });
+  }
+
+  ngOnInit(): void {
+    this.titleSrv.setTitle('Join Adopt a Pokemon');
   }
 
   onSubmit(event: Event) {

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import {
   clearPokemonsList,
@@ -12,10 +13,17 @@ import { Pokemon } from 'src/app/typings';
   templateUrl: './pokemons.component.html',
   styleUrls: ['./pokemons.component.scss'],
 })
-export class PokemonsComponent {
+export class PokemonsComponent implements OnInit {
   adoptedPokemons$ = this.store.select(selectPokemonsList);
 
-  constructor(private readonly store: Store) {}
+  constructor(
+    private readonly titleSrv: Title,
+    private readonly store: Store
+  ) {}
+
+  ngOnInit(): void {
+    this.titleSrv.setTitle('Pokemon list');
+  }
 
   clearList() {
     this.store.dispatch(clearPokemonsList());
