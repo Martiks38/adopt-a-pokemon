@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { PokemonDataService } from 'src/app/services';
@@ -29,26 +29,36 @@ export class PokemonComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.router.paramMap.subscribe((params) => {
-      const titleName = params.get('pokemon');
+    this.router.paramMap
+      .pipe(
+        tap((params) => {
+          const titleName = params.get('pokemon');
 
-      if (typeof titleName === 'string') {
-        this.titleSrv.setTitle(capitalize(titleName));
+          if (typeof titleName !== 'string') {
+            this.error = { state: true, msg: `${titleName} doesn't exist.` };
+            return;
+          }
 
-        const storedPokemon = window.localStorage.getItem(storagePokemon);
+          this.titleSrv.setTitle(capitalize(titleName));
 
-        if (!storedPokemon) {
+          const storedPokemon = window.sessionStorage.getItem(storagePokemon);
+
+          if (!storedPokemon) {
+            this.getPokemon(titleName);
+            return;
+          }
+
+          const parsePokemon: Pokemon = JSON.parse(storedPokemon);
+
+          if (parsePokemon.name === titleName) {
+            this.pokemon = parsePokemon;
+            return;
+          }
+
           this.getPokemon(titleName);
-          return;
-        }
-
-        const parsePokemon: Pokemon = JSON.parse(storedPokemon);
-
-        this.pokemon = parsePokemon;
-      } else {
-        this.error = { state: true, msg: `${titleName} doesn't exist.` };
-      }
-    });
+        })
+      )
+      .subscribe();
   }
 
   private getPokemon(name: string): void {

@@ -4,31 +4,33 @@
   <div class="bgPokemon"></div>
   <div class="pokemonContainer">
     <div class="pokemon">
-      <img class="pokemon__img"
-        [src]="pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default"
-        [alt]="pokemon.name" loading="eager">
-      <article>
-        <header>
-          <h2 class="pokemon__name">{{pokemon.name}}</h2>
-        </header>
-        <table class="pokemon__data">
-          <tr class="pokemon__data__stat">
-            <td class="pokemon__data__property">Height</td>
-            <td class="pokemon__data__value">{{pokemon.height}}</td>
-          </tr>
-          <tr class="pokemon__data__stat">
-            <td class="pokemon__data__property">Weight</td>
-            <td class="pokemon__data__value">{{pokemon.weight}}</td>
-          </tr>
-          <tr class="pokemon__data__stat">
-            <td class="pokemon__data__property">Types</td>
-            <td class="pokemon__data__value">
-              <span>{{pokemon.types | capitalize | ListForm}}</span>
-            </td>
-          </tr>
-        </table>
-        <button (click)="addPokemonToAdoptionList()" class="button__adopt">Adopt</button>
-      </article>
+      <ng-container *ngIf="pokemon">
+        <img class="pokemon__img"
+          [src]="pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default"
+          [alt]="pokemon.name" loading="eager">
+        <article>
+          <header>
+            <h2 class="pokemon__name">{{pokemon.name}}</h2>
+          </header>
+          <table class="pokemon__data">
+            <tr class="pokemon__data__stat">
+              <td class="pokemon__data__property">Height</td>
+              <td class="pokemon__data__value">{{pokemon.height}}</td>
+            </tr>
+            <tr class="pokemon__data__stat">
+              <td class="pokemon__data__property">Weight</td>
+              <td class="pokemon__data__value">{{pokemon.weight}}</td>
+            </tr>
+            <tr class="pokemon__data__stat">
+              <td class="pokemon__data__property">Types</td>
+              <td class="pokemon__data__value">
+                <span>{{pokemon.types | capitalize | ListForm}}</span>
+              </td>
+            </tr>
+          </table>
+          <button (click)="addPokemonToAdoptionList()" class="button__adopt">Adopt</button>
+        </article>
+      </ng-container>
     </div>
   </div>
 </app-main-container>
