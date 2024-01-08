@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 
 import { PokemonDataService } from 'src/app/services';
 import { SearchPokemonComponent } from '../search-pokemon';
 import {
+  getLimitPokemons,
   storageNavigationPageLinks,
   storagePokemonsList,
 } from 'src/assets/constants';
@@ -25,61 +26,63 @@ import type { PageLinks, Pokemon } from 'src/app/typings';
   standalone: true,
 })
 export class ViewPokemonsComponent implements OnInit {
-  pokemons!: Pokemon[];
-  navigationButtonLinks: PageLinks = {
-    previous: false,
-    next: false,
-    offset: 0,
-  };
+  pokemons: Pokemon[] = [];
   errorMessage: string | null = null;
 
   constructor(private pokemonSvc: PokemonDataService) {}
 
   ngOnInit(): void {
-    this.pokemonSvc.currentPage$.subscribe(() => {
-      const cachePokemonsList =
-        window.localStorage.getItem(storagePokemonsList);
-      const cacheNavigationPageLinks = window.localStorage.getItem(
-        storageNavigationPageLinks
-      );
+    this.pokemonSvc.navigation$
+      .pipe(
+        tap(() => {
+          const cachePokemonsList =
+            window.localStorage.getItem(storagePokemonsList);
+          const cacheNavigationPage = window.localStorage.getItem(
+            storageNavigationPageLinks
+          );
 
-      if (!cachePokemonsList || !cacheNavigationPageLinks) {
-        this.loadPokemons();
-        return;
-      }
+          if (!cachePokemonsList || !cacheNavigationPage) {
+            this.loadPokemons();
+            return;
+          }
 
-      const parseCachePokemonsList: Pokemon[] = JSON.parse(cachePokemonsList);
-      const parseCacheNavigationPageLinks: PageLinks = JSON.parse(
-        cacheNavigationPageLinks
-      );
+          const parseCachePokemonsList: Pokemon[] =
+            JSON.parse(cachePokemonsList);
+          const parseCacheNavigationPage: PageLinks =
+            JSON.parse(cacheNavigationPage);
 
-      const checkParseCachePokemons =
-        Array.isArray(parseCachePokemonsList) &&
-        parseCachePokemonsList.length !== 0;
+          const checkParseCachePokemons =
+            Array.isArray(parseCachePokemonsList) &&
+            parseCachePokemonsList.length !== getLimitPokemons;
 
-      const checkPrseCacheNavigationPageLinks =
-        typeof parseCacheNavigationPageLinks.previous === 'boolean' &&
-        typeof parseCacheNavigationPageLinks.next === 'boolean' &&
-        typeof parseCacheNavigationPageLinks.offset === 'number';
+          const checkParseCacheNavigationPageLinks =
+            typeof parseCacheNavigationPage.previous === 'boolean' &&
+            typeof parseCacheNavigationPage.next === 'boolean' &&
+            typeof parseCacheNavigationPage.offset === 'number' &&
+            typeof parseCacheNavigationPage.totalPages === 'number';
 
-      if (!checkParseCachePokemons || !checkPrseCacheNavigationPageLinks) {
-        this.loadPokemons();
-        return;
-      }
+          if (!checkParseCachePokemons || !checkParseCacheNavigationPageLinks) {
+            this.loadPokemons();
+            return;
+          }
 
-      this.pokemons = parseCachePokemonsList;
+          this.pokemons = parseCachePokemonsList;
 
-      const { next, previous, offset } =
-        this.pokemonSvc.getNavigationPageLinks();
-      const checkNavigationPageLinks =
-        parseCacheNavigationPageLinks.next !== next ||
-        parseCacheNavigationPageLinks.previous !== previous ||
-        parseCacheNavigationPageLinks.offset !== offset;
+          let next: boolean = false;
+          let previous: boolean = false;
+          let offset: number = 0;
 
-      if (checkNavigationPageLinks) {
-        this.pokemonSvc.setNavigationPageLinks(parseCacheNavigationPageLinks);
-      }
-    });
+          const checkNavigationPageLinks =
+            parseCacheNavigationPage.next !== next ||
+            parseCacheNavigationPage.previous !== previous ||
+            parseCacheNavigationPage.offset !== offset;
+
+          if (checkNavigationPageLinks) {
+            this.pokemonSvc.setNavigationPageLinks(parseCacheNavigationPage);
+          }
+        })
+      )
+      .subscribe();
   }
 
   private loadPokemons() {
@@ -99,16 +102,9 @@ export class ViewPokemonsComponent implements OnInit {
         })
       )
       .subscribe((data) => {
-        const navigationPageLinks = this.pokemonSvc.getNavigationPageLinks();
-
         const strPokemonsList = JSON.stringify(data);
-        const strNavigationPageLinks = JSON.stringify(navigationPageLinks);
 
         window.localStorage.setItem(storagePokemonsList, strPokemonsList);
-        window.localStorage.setItem(
-          storageNavigationPageLinks,
-          strNavigationPageLinks
-        );
 
         this.pokemons = data;
       });

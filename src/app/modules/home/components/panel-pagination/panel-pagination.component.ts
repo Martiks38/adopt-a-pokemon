@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   OnChanges,
   OnInit,
 } from '@angular/core';
@@ -15,6 +14,7 @@ import {
 import { tap } from 'rxjs';
 import { PokemonDataService } from 'src/app/services';
 import type { PageLinks } from 'src/app/typings';
+import { storageNavigationPageLinks } from 'src/assets/constants';
 
 @Component({
   selector: 'app-panel-pagination',
@@ -25,81 +25,77 @@ import type { PageLinks } from 'src/app/typings';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PanelPaginationComponent implements OnInit, OnChanges {
-  @Input() links: PageLinks = { previous: false, next: false, offset: 0 };
+  links: PageLinks = { previous: false, next: false, offset: 0, totalPages: 0 };
 
-  currentPage: number = this.links.offset;
-  maxPages!: number;
+  currentPage: number = this.links.offset + 1;
   ariaPrevButton: string = this.links.previous
     ? ''
     : 'Initial list of Pokémon.';
   ariaNextButton: string = this.links.next ? '' : 'Final list of Pokémon.';
-  pageOfPokemonsListForm: FormGroup = new FormGroup({
-    currentPage: new FormControl(this.currentPage, {
-      validators: [
-        Validators.required,
-        Validators.min(1),
-        Validators.max(this.maxPages),
-      ],
-    }),
-  });
+  pageOfPokemonsListForm!: FormGroup;
+
   errorNumberPage: boolean = false;
   errorNumberPageMesage: string = '';
 
   constructor(private pokemonSvc: PokemonDataService) {}
+
+  ngOnInit(): void {
+    this.pokemonSvc.navigation$
+      .pipe(
+        tap((links) => {
+          const strNavigationPageLinks = JSON.stringify(links);
+
+          window.localStorage.setItem(
+            storageNavigationPageLinks,
+            strNavigationPageLinks
+          );
+          this.links = links;
+          this.currentPage = links.offset;
+          this.errorNumberPageMesage = `The page number goes from 1 to ${links.totalPages}.`;
+
+          this.pageOfPokemonsListForm = new FormGroup({
+            currentPage: new FormControl(this.currentPage, {
+              validators: [
+                Validators.required,
+                Validators.min(1),
+                Validators.max(this.links.totalPages),
+              ],
+            }),
+          });
+        })
+      )
+      .subscribe();
+  }
 
   ngOnChanges(): void {
     this.ariaPrevButton = this.links.previous ? '' : 'Initial list of Pokémon.';
     this.ariaNextButton = this.links.next ? '' : 'Final list of Pokémon.';
   }
 
-  ngOnInit(): void {
-    this.pokemonSvc.currentPage$
-      .pipe(
-        tap((page) => {
-          const currentPagePokemonList = (this.currentPage = page + 1);
-
-          this.currentPage = currentPagePokemonList;
-          this.pageOfPokemonsListForm.setValue({
-            currentPage: this.currentPage,
-          });
-        })
-      )
-      .subscribe();
-
-    this.pokemonSvc.totalPages$
-      .pipe(
-        tap((p) => {
-          this.maxPages = p;
-          this.errorNumberPageMesage = `The page number goes from 1 to ${p}.`;
-        })
-      )
-      .subscribe();
-  }
-
   previousList() {
-    this.pokemonSvc.setCurrentPageSubjectPrevious();
+    this.pokemonSvc.setPreviousPage();
   }
 
   nextList() {
-    this.pokemonSvc.setCurrentPageSubjectNext();
+    this.pokemonSvc.setNextPage();
   }
 
   onSubmit(event: Event) {
     event.preventDefault();
 
-    const currentPage = this.pageOfPokemonsListForm.get('currentPage');
-    const invalid = currentPage?.invalid;
-
+    const offsetPokemonList = this.pageOfPokemonsListForm.get('currentPage');
+    const invalid = offsetPokemonList?.invalid;
+    console.log(offsetPokemonList);
     if (invalid) {
       this.errorNumberPage = true;
       return;
     }
 
-    const currentPageValue = parseInt(currentPage?.value);
+    const currentPageValue = parseInt(offsetPokemonList?.value) - 1;
 
     if (this.currentPage === currentPageValue) return;
 
     this.errorNumberPage = false;
-    this.pokemonSvc.setCurrentPage(currentPageValue);
+    this.pokemonSvc.setPageNumber(currentPageValue);
   }
 }

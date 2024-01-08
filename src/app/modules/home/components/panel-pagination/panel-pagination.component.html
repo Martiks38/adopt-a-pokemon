@@ -4,7 +4,8 @@
       [attr.aria-label]="ariaPrevButton" aria-describedby="error-message">Previous</button>
     <form [formGroup]="pageOfPokemonsListForm" (ngSubmit)="onSubmit($event)" class="paginationPanel__currentPage">
       <input class="paginationPanel__currentPage__input" type="number" formControlName="currentPage"
-        [value]="currentPage" min="1" [max]="maxPages" aria-label="Current page of the Pokémon list." required>
+        [value]="currentPage + 1" min="1" [max]="links.totalPages" aria-label="Current page of the Pokémon list."
+        required>
     </form>
     <button class="paginationPanel__button" (click)="nextList()" [disabled]="!links.next"
       [attr.aria-label]="ariaNextButton" aria-describedby="error-message">Next</button>

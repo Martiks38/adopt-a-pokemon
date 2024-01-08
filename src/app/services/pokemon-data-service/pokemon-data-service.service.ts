@@ -11,7 +11,6 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-
 import { environment } from 'src/app/environment/environment';
 import {
   Pokemon,
@@ -19,65 +18,117 @@ import {
   FetchAllPokemonsResponse,
 } from 'src/app/typings/pokemon';
 import { getLimitPokemons } from 'src/assets/constants';
-import { PageLinks } from 'src/app/typings';
+import type { PageLinks } from 'src/app/typings';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PokemonDataService {
   private baseUrl = environment.baseUrl;
-  private pageLinks: PageLinks = { previous: false, next: false, offset: 0 };
 
-  private offset = 0;
-  private currentPageSubject = new BehaviorSubject<number>(0);
-  public currentPage$ = this.currentPageSubject.asObservable();
-
-  private totalPages = 0;
-  private totalPagesSubject = new BehaviorSubject(0);
-  public totalPages$ = this.totalPagesSubject.asObservable();
+  private navigation = {
+    previous: false,
+    next: true,
+    offset: 0,
+    totalPages: 0,
+  };
+  private navigationSubject = new BehaviorSubject<PageLinks>({
+    previous: false,
+    next: true,
+    offset: 0,
+    totalPages: 0,
+  });
+  public navigation$ = this.navigationSubject.asObservable();
 
   private readonly http = inject(HttpClient);
 
-  getNavigationPageLinks(): PageLinks {
-    return this.pageLinks;
-  }
-
-  getOffset() {
-    return this.offset;
-  }
-
   setNavigationPageLinks(pageLinks: PageLinks) {
-    this.pageLinks = pageLinks;
-
-    this.currentPageSubject.next(pageLinks.offset);
+    this.navigationSubject.next(pageLinks);
   }
 
-  setCurrentPageSubjectNext() {
-    const numberNextPage = this.offset + 1;
-
-    this.offset = numberNextPage;
-
-    this.currentPageSubject.next(numberNextPage);
+  setNextPage() {
+    this.navigation.offset = Math.min(
+      this.navigation.offset + 1,
+      this.navigation.totalPages
+    );
+    this.activeButtons();
   }
 
-  setCurrentPageSubjectPrevious() {
-    const numberPrevNextPage = this.offset - 1;
-
-    this.offset = numberPrevNextPage;
-
-    this.currentPageSubject.next(numberPrevNextPage);
+  setPreviousPage() {
+    this.navigation.offset = Math.max(this.navigation.offset - 1, 0);
+    this.activeButtons();
   }
 
-  setCurrentPage(pageNumber: number) {
-    const currentPage = pageNumber - 1;
+  setPageNumber(page: number) {
+    this.navigation.offset = page;
 
-    this.offset = currentPage;
-    this.currentPageSubject.next(currentPage);
+    this.navigationSubject.next(this.navigation);
+  }
+
+  activeButtons() {
+    this.navigation.previous = this.navigation.offset > 0;
+    this.navigation.next = this.navigation.offset < this.navigation.totalPages;
+    this.navigationSubject.next(this.navigation);
+  }
+
+  getPokemon(name: string): Observable<Pokemon> {
+    const pokemon$ = this.http
+      .get<PokemonData>(`${this.baseUrl}/pokemon/${name.toLowerCase()}`)
+      .pipe(
+        retry(1),
+        map((pokemon) => this.mappedPokemon(pokemon)),
+        catchError((err) =>
+          throwError(
+            () =>
+              new Error(
+                `An error occurred while obtaining data for the Pokémon ${name}.`
+              )
+          )
+        )
+      );
+
+    return pokemon$;
+  }
+
+  getAllPokemons(): Observable<Pokemon[]> {
+    const url = `${this.baseUrl}/pokemon?limit=${getLimitPokemons}&offset=${
+      this.navigation.offset * getLimitPokemons
+    }`;
+
+    return this.http.get<FetchAllPokemonsResponse>(url).pipe(
+      retry(1),
+      tap((resApi) => {
+        if (this.navigation.totalPages === 0) {
+          const pageNumber = Math.ceil(resApi.count / getLimitPokemons);
+
+          this.navigation.totalPages = pageNumber;
+
+          this.navigationSubject.next(this.navigation);
+        }
+      }),
+      switchMap(({ results }) => {
+        const observablesPokemons = results.map(({ url }) =>
+          this.http.get<PokemonData>(url)
+        );
+
+        return forkJoin(observablesPokemons).pipe(
+          map((pokemonDataArray) => {
+            return pokemonDataArray.map((pokemon) =>
+              this.mappedPokemon(pokemon)
+            );
+          })
+        );
+      }),
+      catchError((err) =>
+        throwError(
+          () => new Error('An error occurred while obtaining the Pokémon list.')
+        )
+      )
+    );
   }
 
   private mappedPokemon(pokemon: PokemonData): Pokemon {
-    // La respuesta de los datos del pokémon incluyen más propiedas
-    // Por esto, se extraen los datos referidos a la interface Pokemon
+    // La respuesta de los datos del pokémon incluyen más propiedades
     const { name, height, weight, sprites, types } = pokemon;
 
     const {
@@ -105,69 +156,5 @@ export class PokemonDataService {
     };
 
     return mappedPokemon;
-  }
-
-  getPokemon(name: string): Observable<Pokemon> {
-    const pokemon$ = this.http
-      .get<PokemonData>(`${this.baseUrl}/pokemon/${name.toLowerCase()}`)
-      .pipe(
-        retry(1),
-        map((pokemon) => this.mappedPokemon(pokemon)),
-        catchError((err) =>
-          throwError(
-            () =>
-              new Error(
-                `An error occurred while obtaining data for the Pokémon ${name}.`
-              )
-          )
-        )
-      );
-
-    return pokemon$;
-  }
-
-  getAllPokemons(): Observable<Pokemon[]> {
-    const url = `${this.baseUrl}/pokemon?limit=${getLimitPokemons}&offset=${
-      this.offset * getLimitPokemons
-    }`;
-
-    return this.http.get<FetchAllPokemonsResponse>(url).pipe(
-      retry(1),
-      tap((resApi) => {
-        this.pageLinks = {
-          previous: Boolean(resApi.previous),
-          next: Boolean(resApi.next),
-          offset: this.offset,
-        };
-
-        if (this.totalPages === 0) {
-          const pageNumber = Math.ceil(resApi.count / getLimitPokemons);
-
-          this.totalPages = pageNumber;
-
-          this.totalPagesSubject.next(pageNumber);
-        }
-
-        return resApi;
-      }),
-      switchMap(({ results }) => {
-        const observablesPokemons = results.map(({ url }) =>
-          this.http.get<PokemonData>(url)
-        );
-
-        return forkJoin(observablesPokemons).pipe(
-          map((pokemonDataArray) => {
-            return pokemonDataArray.map((pokemon) =>
-              this.mappedPokemon(pokemon)
-            );
-          })
-        );
-      }),
-      catchError((err) =>
-        throwError(
-          () => new Error('An error occurred while obtaining the Pokémon list.')
-        )
-      )
-    );
   }
 }
